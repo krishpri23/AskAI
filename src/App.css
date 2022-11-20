@@ -1,41 +1,132 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+* {
+    box-sizing: border-box;
   }
-  to {
-    transform: rotate(360deg);
+
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
+  
+.container {
+    max-width: 550px;
+    max-height: 800px;
+    font-family: inter;
+
+   
+}
+.header{
+   
+    flex-shrink: 0;
+    background-color: #1A1B21;
+    
+    
+ 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.my-img{
+    width: 320px;
+    height: 320px; 
+   
+}
+
+li::marker {
+    content: none;
   }
+
+.main-content {
+   
+    background-color:#1A1B21;
+    color: #FFFFFF;
+    width: 320px;
+    height: 350px;
+    text-align: center;
+    flex-shrink: 0;
+  
+    margin: 0; 
+    padding: 10px 
+
+   
 }
 
-.card {
-  padding: 2em;
+.main-content > h1,h2 {
+    margin: 0;
 }
 
-.read-the-docs {
-  color: #888;
+
+.name {
+    font-size: 25px;
+    font-weight: 700;
+    flex-shrink: 0;
+
+  }
+  .designation {
+    font-size: 13px;
+    font-weight: 400;
+    color: #F3BF99;
+    
+  }
+
+  .website {
+    font-weight: 400;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  .button-div{
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .button {
+    padding: 9px, 13px, 9px, 11px;
+    width: 115px;
+    height: 34px;
+    border-radius: 6px;
+    border: none;
+    margin-left: 10px;
+  }
+
+  #linkedin {
+    background-color: #5093E2;
+  }
+
+  .content{
+    font-size: 10px;
+    font-weight: 400;
+    text-align: start;
+  }
+  
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+    text-align: start;
+   
+  }
+ 
+  .self-intro {
+    width: 250px;
+    height: 200px;
+  
+    margin-top: 20px;
+    padding-left: 15px;
 }
+
+.footer-icons {
+    display: flex;
+    justify-content: center;
+    background-color: #1A1B21;
+
+    width: 320px;
+    height: 64px;
+    margin: 0;
+
+    margin-right: auto;
+    margin-left: auto;
+
+}
+
+
+
+
