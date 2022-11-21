@@ -5,14 +5,14 @@ export default function Main() {
     // display flex column 
 
     return <main className='main-content'>
-    
                 <h1 className='name'>Krishnapriya Amarnath</h1>
                 <h2 className='designation'> Frontend Developer</h2>
                 <p className='website'>mywebsite.com</p>
                 {/* display flex default  */}
                 <div className="button-div">
-                    <button className="button" id='email'> Email </button>
-                    <button className="button" id='linkedin'> LinkedIn </button>
+                    
+                    <button className="button" id='email'> <i class="fa-solid fa-envelope fa-lg"></i>Email </button>
+                    <button className="button" id='linkedin'><i class="fa-brands fa-linkedin fa-lg"></i>LinkedIn </button>
                 </div>
                 <div className='self-intro'>
                     <h1 className='title'> About </h1>

@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Footer () {
     // flex default
-    return <footer>
+    return <footer className='footer-section'>
         <ul className='footer-icons'>
             <li><i class="fa-brands fa-twitter"></i></li>
             <li><i class="fa-brands fa-github"></i></li>

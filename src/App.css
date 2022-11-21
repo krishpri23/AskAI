@@ -1,6 +1,7 @@
 
 * {
     box-sizing: border-box;
+    
   }
 
   body {
@@ -8,56 +9,50 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-family:'Inter', sans-serif;
+
+    
   }
   
 .container {
     max-width: 550px;
     max-height: 800px;
-    font-family: inter;
-
-   
-}
-.header{
-   
-    flex-shrink: 0;
-    background-color: #1A1B21;
-    
-    
- 
 }
 
 .my-img{
     width: 320px;
     height: 320px; 
+
    
 }
 
 li::marker {
     content: none;
+   
   }
 
 .main-content {
    
-    background-color:#1A1B21;
+    background-color: #222228;
     color: #FFFFFF;
     width: 320px;
     height: 350px;
     text-align: center;
     flex-shrink: 0;
-  
+
     margin: 0; 
     padding: 10px 
 
    
 }
 
-.main-content > h1,h2 {
+.main-content h1,h2 {
     margin: 0;
 }
 
 
 .name {
-    font-size: 25px;
+    font-size: 21px;
     font-weight: 700;
     flex-shrink: 0;
 
@@ -92,8 +87,12 @@ li::marker {
     background-color: #5093E2;
   }
 
+  i {
+    margin-right:9px;
+  }
+
   .content{
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 400;
     text-align: start;
   }
@@ -102,7 +101,7 @@ li::marker {
     font-size: 16px;
     font-weight: 700;
     text-align: start;
-   
+    
   }
  
   .self-intro {
@@ -110,22 +109,30 @@ li::marker {
     height: 200px;
   
     margin-top: 20px;
-    padding-left: 15px;
+    padding-left: 8px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .footer-icons {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     background-color: #1A1B21;
+    color: #F3BF99;
 
     width: 320px;
-    height: 64px;
+    height: 55px;
     margin: 0;
+    padding: 20px;
 
     margin-right: auto;
     margin-left: auto;
 
 }
+
+
+
+
 
 
 
