@@ -24,6 +24,11 @@
     height: 320px; 
 
    
+    /* REMOVES THE WHITE SPACE BELOW THE IMAGE
+    ref: https://stackoverflow.com/questions/5804256/image-inside-div-has-extra-space-below-the-image
+    */
+    display: block;
+   
 }
 
 li::marker {
