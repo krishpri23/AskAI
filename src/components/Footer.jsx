@@ -4,9 +4,9 @@ export default function Footer () {
     // flex default
     return <footer>
         <ul className='footer-icons'>
-            <li><button>Twitter</button></li>
-            <li><button>Facebook</button></li>
-            <li><button>Github</button></li>
+            <li><i class="fa-brands fa-twitter"></i></li>
+            <li><i class="fa-brands fa-github"></i></li>
+            <li><i class="fa-brands fa-codepen"></i></li>
             
         </ul>
     </footer>
