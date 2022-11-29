@@ -74,8 +74,12 @@ p {
 
 .navbar {
     background-color: #F55A5A;;
-    text-align: center;
+    gap: 10px;
     padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
 }
 
 a {
