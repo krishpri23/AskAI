@@ -1,11 +1,20 @@
 import React from 'react'
-import './App.css'
-
+import Card from './components/Card'
+import Navbar from './components/Navbar'
+import data from './data'
 
 function App() {
-  
+  const cards = data.map(item =>{
+    return <Card
+            key = {item.id}
+            item = {item}
+            />
+  })
   return <div className='container'>
-            <h1> Sample travel journal </h1>
+            <Navbar />
+            <section className='trip-list'>
+            {cards}
+            </section>
           </div>
 
 }
