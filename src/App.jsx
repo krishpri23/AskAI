@@ -1,22 +1,18 @@
-import React from 'react'
-import Card from './components/Card'
-import Navbar from './components/Navbar'
-import data from './data'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const cards = data.map(item =>{
-    return <Card
-            key = {item.id}
-            item = {item}
-            />
-  })
-  return <div className='container'>
-            <Navbar />
-            <section className='trip-list'>
-            {cards}
-            </section>
-          </div>
+  const [count, setCount] = useState(0);
 
+  return (
+    <main>
+      <div>
+        <h2 className="text-3xl text-red-500"> hmm </h2>
+      </div>
+    </main>
+  );
 }
 
-export default App
+export default App;
