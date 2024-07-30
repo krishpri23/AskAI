@@ -15,8 +15,8 @@ function DashboardLayout() {
   //     if (userId && !isLoaded) return "Loading...";
   //   }, [isLoaded, userId, navigate]);
   return (
-    <div className="w-full min-h-screen flex justify-between bg-green-50 debug-overflow ">
-      <div className="max-md:hidden w-1/5  px-5 py-4 bg-blue-500 ">
+    <div className="w-full min-h-screen flex justify-between debug-overflow ">
+      <div className="max-md:hidden w-1/5  px-5 py-4 ">
         {" "}
         <ChatList />{" "}
       </div>
