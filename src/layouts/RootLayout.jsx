@@ -17,7 +17,7 @@ if (!PUBLISHABLE_KEY) {
 function RootLayout() {
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/ ">
-      <div className="">
+      <div className="min-h-screen flex flex-col">
         <header className="p-4 flex justify-between bg-slate-950 text-slate-300 font-bold">
           <Link to="/">
             <span>AskAI</span>
@@ -31,7 +31,7 @@ function RootLayout() {
             </SignedIn>
           </div>
         </header>
-        <main className="bg-slate-950 w-screen h-screen text-slate-300">
+        <main className="flex-grow bg-slate-950  text-slate-300">
           <Outlet />
         </main>
       </div>

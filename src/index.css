@@ -2,8 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer {
+@layer components {
   .chat-links {
     @apply hover:bg-slate-50 px-3 py-1 rounded-lg;
+  }
+  .name {
+    @apply uppercase text-3xl font-bold text-blue-600 tracking-widest bg-gradient-to-r from-blue-600 to-red-800 text-transparent bg-clip-text;
+  }
+  /* Add this to your CSS file to inspect overflow */
+  .debug-overflow {
+    border: 1px solid red; /* To visually see the container edges */
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  hr {
+    @apply border border-slate-900 w-full;
   }
 }
