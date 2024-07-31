@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/home/Home";
+import Home from "./pages/home/Home.jsx";
 import ChatPage from "./pages/chatpage/ChatPage.jsx";
 import RootLayout from "./layouts/RootLayout.jsx";
 import Login from "./pages/Login.jsx";

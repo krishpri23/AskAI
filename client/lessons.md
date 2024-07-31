@@ -20,6 +20,10 @@
 - `flex-basis`: Use flex-basis to set the initial size of the element before distributing space.
   Using `flex-1`, the div can expand/shrink depending on the available space
 
+## ImageKit api
+
+- Upload images for free, resize etc
+
 ## Challenges
 
 1. I was trying to apply `w-full h-full` to every div to make sure it takes the full w&h of parent. Instead use `relative` on the parent div and use `absolute inset-0` on the child div.
