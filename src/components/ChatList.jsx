@@ -9,7 +9,7 @@ function ChatList() {
     msOverflowStyle: "none", // For Internet Explorer and Edge
   };
   return (
-    <section className="w-full min-h-full flex flex-col gap-5 justify-start items-start">
+    <section className="w-full min-h-screen flex flex-col gap-5 justify-start items-start">
       <h1 className="uppercase text-xl"> Dashboard </h1>
       <Link to="/dashboard" className="chat-links">
         Create new chat

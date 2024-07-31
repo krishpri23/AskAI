@@ -21,7 +21,7 @@ function DashboardLayout() {
         <ChatList />{" "}
       </div>
       <div className="w-full flex flex-col ">
-        <main className="flex-grow overflow-hidden">
+        <main className="flex-1 overflow-hidden">
           <Outlet />
         </main>
       </div>

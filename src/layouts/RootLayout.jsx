@@ -31,7 +31,7 @@ function RootLayout() {
             </SignedIn>
           </div>
         </header>
-        <main className="flex-grow bg-slate-950  text-slate-300">
+        <main className="flex-1 bg-slate-950  text-slate-300">
           <Outlet />
         </main>
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 function Home() {
   return (
-    <main className="w-full px-10 flex flex-col justify-center items-center md:flex-row md:justify-between md:items-start">
+    <main className="w-full px-10 flex flex-col justify-center items-center md:flex-row md:justify-between md:items-start text-slate-900">
       <section className="px-5 py-2 flex flex-col justify-center gap-5 items-start text-white">
         <h1 className="name"> AskAI </h1>
         <h3> Supercharge your creativity and productivity </h3>
