@@ -1,4 +1,6 @@
 import { IKContext, IKImage, IKUpload } from "imagekitio-react";
+import { useRef } from "react";
+import { FaPaperclip } from "react-icons/fa6";
 
 const authenticator = async () => {
   try {
@@ -19,40 +21,65 @@ const authenticator = async () => {
   }
 };
 
-function Upload({ imgInfo }) {
+function Upload({ setImgInfo }) {
+  // when we click on file icon, IKUpload will run
+  const uploadRef = useRef(null);
   const onError = (err) => {
     console.log("Error", err);
   };
 
   const onSuccess = (res) => {
     console.log("Success", res);
+    // set the res obj to this fn
+    setImgInfo((prev) => ({ ...prev, isLoading: false, dbData: res }));
   };
   const onUploadProgress = (progress) => {
     console.log("Progress", progress);
   };
 
+  //converts the file into a Base64-encoded string and send to gem api
   const onUploadStart = (evt) => {
-    console.log("Start", evt);
+    //evt has local file details
+    const file = evt.target.files[0];
+    //browser api reads file content
+    const reader = new FileReader();
+    console.log("reader", reader);
+    reader.onloadend = () => {
+      setImgInfo((prev) => ({
+        ...prev,
+        isLoading: true,
+        aiData: {
+          inlineData: {
+            data: reader.result.split(",")[1],
+            mimeType: file.type,
+          },
+        },
+      }));
+    };
+    reader.readAsDataURL(file);
   };
 
-  const pubKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
-  console.log(pubKey, "key");
   return (
-    <div className="bg-red-50 p-5">
+    <div className="px-4">
       <IKContext
         urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
         publicKey={import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY}
         authenticator={authenticator}
       >
-        <p>Upload an image</p>
         <IKUpload
           fileName="file.png"
           onError={onError}
           onSuccess={onSuccess}
           onUploadProgress={onUploadProgress}
           onUploadStart={onUploadStart}
+          useUniqueFileName={true}
+          style={{ display: "none" }}
+          ref={uploadRef}
         />
       </IKContext>
+      <div className="icon-btn ml-2" onClick={() => uploadRef.current.click()}>
+        <FaPaperclip />
+      </div>
     </div>
   );
 }

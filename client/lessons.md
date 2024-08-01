@@ -24,6 +24,10 @@
 
 - Upload images for free, resize etc
 
+## GEMINIAPI
+
+- 2 options to generate text from image, 1. send img to google and wait for ans 2. Reads local file without uploading and responds.(recommended)
+
 ## Challenges
 
 1. I was trying to apply `w-full h-full` to every div to make sure it takes the full w&h of parent. Instead use `relative` on the parent div and use `absolute inset-0` on the child div.

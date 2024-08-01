@@ -1,34 +1,87 @@
+// This is a new prompt component where user can ask question
+
 import { useEffect, useRef, useState } from "react";
-import { FaArrowUpLong, FaPaperclip } from "react-icons/fa6";
+import { FaArrowUpLong } from "react-icons/fa6";
 import Upload from "./Upload";
+import { IKImage } from "imagekitio-react";
+import model from "../lib/Gemini";
+import Markdown from "react-markdown";
 
 function SubmitQs() {
   const endRef = useRef(null);
-  const imgInfo = useState({
+
+  //  Using this variable, we can display them on the left/right side of the screen
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+
+  // Send this fn to upload component to save the response object
+  const [imgInfo, setImgInfo] = useState({
     isLoading: false,
     dbData: {},
-    filePath: "",
+    error: "",
+    aiData: {}, // ai response
   });
 
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [question, answer, imgInfo.dbData]);
+
+  // Using GeminiAPI, we are generating response
+  const add = async (prompt) => {
+    setQuestion(prompt);
+    const result = await model.generateContent(
+      Object.entries(imgInfo.aiData).length
+        ? [prompt, imgInfo.aiData]
+        : [prompt]
+    );
+    const response = await result.response;
+    const text = response.text();
+    setAnswer(text);
+    setImgInfo("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const text = e.target.text.value;
+    if (!text) return;
+    add(text);
+    e.target.text.value = "";
+  };
 
   return (
     <>
+      <div className="flex flex-col">
+        {question && <div className="user"> {question} </div>}
+        {answer && (
+          <div className="response">
+            {" "}
+            <Markdown>{answer}</Markdown>{" "}
+          </div>
+        )}
+      </div>
+
+      {imgInfo?.isLoading && <span> Loading...</span>}
+      {imgInfo?.dbData && (
+        <IKImage
+          urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
+          path={imgInfo?.dbData?.filePath}
+          width={100}
+        />
+      )}
       {/* To scroll down automatically on refresh */}
       <div ref={endRef} />
+
       <form
         action=""
+        onSubmit={handleSubmit}
         className="w-full rounded-xl bg-slate-600 text-slate-300 flex items-center my-5 "
       >
-        <button>
-          {/* className="icon-btn ml-2" */}
-          {/* <FaPaperclip /> */}
-          <Upload imgInfo={imgInfo} />
-        </button>
+        <Upload setImgInfo={setImgInfo} />
+
         <input
-          className="w-full px-10 py-3 outline-none border-none bg-transparent"
+          type="text"
+          name="text"
+          className="w-full px-2 py-3 outline-none border-none bg-transparent"
           placeholder="Ask me anything..."
         />
         <button className="icon-btn">
