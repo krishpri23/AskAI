@@ -26,6 +26,11 @@
 
 ## GEMINIAPI
 
+- Initialize the model in the gemini.js file
+- Using `generateContent()` we can send the question to the gem api and handle the response by saving it in a state var
+- using state var, display on the chat list,user on the right and response to the left
+- For images, convert the file to dataURL before sending to gem api for faster response.
+
 - 2 options to generate text from image, 1. send img to google and wait for ans 2. Reads local file without uploading and responds.(recommended)
 
 ## Challenges
