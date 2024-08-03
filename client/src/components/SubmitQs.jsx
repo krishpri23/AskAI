@@ -26,18 +26,41 @@ function SubmitQs() {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   }, [question, answer, imgInfo.dbData]);
 
+  const chat = model.startChat({
+    history: [
+      // {
+      //   role: "user",
+      //   parts: [{ text: "Write me a story" }],
+      // },
+      // {
+      //   role: "model",
+      //   parts: [{ text: "Great to meet you. What would you like to know?" }],
+      // },
+    ],
+    generationConfig: {
+      // maxOutputTokens: 100,
+    },
+  });
+
   // Using GeminiAPI, we are generating response
   const add = async (prompt) => {
     setQuestion(prompt);
-    const result = await model.generateContent(
+
+    const result = await chat.sendMessageStream(
       Object.entries(imgInfo.aiData).length
         ? [prompt, imgInfo.aiData]
         : [prompt]
     );
-    const response = await result.response;
-    const text = response.text();
-    setAnswer(text);
-    setImgInfo("");
+
+    let accumulatedText = "";
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      accumulatedText += chunkText;
+      console.log(accumulatedText, "acc text");
+
+      setAnswer(accumulatedText);
+    }
+    setImgInfo({ isLoading: false, error: "", dbData: {}, aiData: {} });
   };
 
   const handleSubmit = (e) => {
