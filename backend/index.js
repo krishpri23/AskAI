@@ -2,9 +2,17 @@
 const express = require("express");
 const Imagekit = require("imagekit");
 const cors = require("cors");
+const { default: mongoose } = require("mongoose");
 
 const PORT = process.env.port || 3000;
 const app = express();
+
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.DB_URI);
+    console.log("db connected");
+  } catch (error) {}
+};
 
 const imagekit = new Imagekit({
   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
@@ -24,5 +32,6 @@ app.get("/api/upload", (req, res) => {
 });
 
 app.listen(PORT, () => {
+  connect();
   console.log("server is running!");
 });

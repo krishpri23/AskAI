@@ -27,6 +27,7 @@ function SubmitQs() {
   }, [question, answer, imgInfo.dbData]);
 
   const chat = model.startChat({
+    // roles can't be changed. either user or model, use this history in chat model
     history: [
       // {
       //   role: "user",
