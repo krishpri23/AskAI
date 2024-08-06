@@ -3,8 +3,27 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import { FaCirclePlus } from "react-icons/fa6";
 import { FaRegImages } from "react-icons/fa6";
 import { FaComputer } from "react-icons/fa6";
+import { useAuth } from "@clerk/clerk-react";
 
 function DashboardPage() {
+  const { userId } = useAuth();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const text = e.target.text.value;
+    console.log("text response", text);
+
+    if (!text) return;
+
+    console.log("userId", userId);
+
+    await fetch("http://localhost:3000/api/chats", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, text }),
+    });
+  };
+
   return (
     <section className="relative w-full flex flex-col min-h-screen bg-slate-900 text-white p-5 ">
       {/* logo and create chat links */}
@@ -29,14 +48,18 @@ function DashboardPage() {
 
       <div className=" mt-auto w-full flex justify-center mb-10 ">
         <form
-          action=""
+          onSubmit={handleSubmit}
           className="w-3/4 rounded-xl bg-slate-700 text-slate-300 flex items-center "
         >
           <input
             className="w-full px-10 py-3 outline-none border-none bg-transparent"
             placeholder="Ask me anything..."
+            name="text"
           />
-          <button className="rounded-full bg-slate-100 p-2 text-slate-900 mr-2">
+          <button
+            className="rounded-full bg-slate-100 p-2 text-slate-900 mr-2"
+            // onClick={handleSubmit}
+          >
             {" "}
             <FaArrowUpLong />
           </button>

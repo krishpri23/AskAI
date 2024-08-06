@@ -1,4 +1,7 @@
 // Run express
+const Chat = require("./models/chat");
+require("dotenv").config();
+const UserChats = require("./models/userChats");
 const express = require("express");
 const Imagekit = require("imagekit");
 const cors = require("cors");
@@ -11,24 +14,82 @@ const connect = async () => {
   try {
     await mongoose.connect(process.env.DB_URI);
     console.log("db connected");
-  } catch (error) {}
+  } catch (error) {
+    console.log("mongodb error", error);
+  }
 };
 
-const imagekit = new Imagekit({
-  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
-});
+// const imagekit = new Imagekit({
+//   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+//   publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+//   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+// });
 
 app.use(
   cors({
     url: "http://localhost:5173/",
   })
 );
+
+app.use(express.json());
+
 app.get("/api/upload", (req, res) => {
   //  {token, signature,expiry} as response
   const result = imagekit.getAuthenticationParameters();
   res.send(result);
+});
+
+app.post("/api/chats", async (req, res) => {
+  const { userId, text } = req.body;
+  console.log(text, userId);
+
+  try {
+    // create new chat
+    const newChat = new Chat({
+      userId: userId,
+      history: [
+        {
+          role: "user",
+          parts: [{ text: text }],
+        },
+      ],
+    });
+
+    // mongodb creates _id
+    const savedChat = await newChat.save();
+
+    // check if the user exists, if yes, push the chat
+    const userChats = await UserChats.find({ userId: userId });
+
+    if (!userChats.length) {
+      const newUserChats = new UserChats({
+        userId: userId,
+        chats: [
+          {
+            _id: savedChat._id,
+            tittle: text.substring(0, 40),
+          },
+        ],
+      });
+    } else {
+      // if exists, push to existing array
+      await UserChats.updateOne(
+        { userId: userId }, // filter using id then push to that array
+        {
+          $push: {
+            chats: {
+              _id: savedChat._id,
+              title: text.substring(0, 40),
+            },
+          },
+        }
+      );
+    }
+    res.status(201).send(newChat._id);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error creating chat");
+  }
 });
 
 app.listen(PORT, () => {

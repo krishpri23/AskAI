@@ -17,7 +17,7 @@ const userChatsSchema = new mongoose.Schema({
       },
       createdAt: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
         required: true,
       },
     },
@@ -25,5 +25,7 @@ const userChatsSchema = new mongoose.Schema({
 });
 
 // Check in the db model or create a new one
-export default mongoose.models.userchats ||
-  mongoose.model("userchats", userChatsSchema);
+const UserChats =
+  mongoose.models.UserChats || mongoose.model("UserChats", userChatsSchema);
+
+module.exports = UserChats;
