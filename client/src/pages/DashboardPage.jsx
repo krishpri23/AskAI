@@ -19,8 +19,7 @@ function DashboardPage() {
         body: JSON.stringify({ text }),
       });
 
-      // since the res is send as plain text use .text()
-      // return the data so that onSuccess can use it
+      // since the res is send as plain text use .text() and return it
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

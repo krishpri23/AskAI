@@ -14,4 +14,6 @@
 ### Challenges
 
 1. all chats were saving to chats and not userchats because i forgot to add `await` before saving userchats
+
 2. creating new chat in dashboard page does not take to new page with chat id. it says undefined : `_id: new ObjectId('66b1bbd477d2080cc6da8e54')` is the response for \_id, we need to extract the id from here.
+   - Since the response we send is just plain text, frontend must accept `res.text()` and return it.

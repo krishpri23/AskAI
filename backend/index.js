@@ -112,6 +112,8 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
       });
 
       await newUserChats.save();
+      // respond the id for first chat message
+      res.status(201).send(newUserChats._id.toString());
     } else {
       // if exists, push to existing array
       await UserChats.updateOne(

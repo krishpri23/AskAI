@@ -40,3 +40,5 @@
 - If the child div needs to take up as many space as needed, we can use `flex` on parent div and use `flex-grow` on child div
 
 2. Scrollbar on the dashboard page does not go away inspite of removing h-screen and added `min-h-screen`. Need to figure out
+
+3. When creating 1st chat message in dashboard page, it is navigated to new chat page with id, sidebar is populated with title but we can't display user's message as the response from `api/chats/:id` returned is empty at that time of calling api.
