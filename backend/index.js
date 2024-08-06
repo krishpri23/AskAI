@@ -28,7 +28,7 @@ const connect = async () => {
 
 app.use(
   cors({
-    url: "http://localhost:5173/",
+    url: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -41,14 +41,29 @@ app.get("/api/upload", (req, res) => {
   res.send(result);
 });
 
+// fetch all user chats
+app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
+  const userId = req.auth.userId;
+
+  try {
+    const userChats = await UserChats.findOne({ userId });
+    console.log(userChats, "fetch chats ");
+    res.status(200).send(userChats.chats);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error fetching chat");
+  }
+});
+
 app.get("/api/test", ClerkExpressRequireAuth(), async (req, res) => {
   console.log("success");
   res.send("success");
 });
 
 app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
-  const { userId, text } = req.body;
-  console.log(text, userId);
+  const userId = req.auth.userId;
+  const { text } = req.body;
+  console.log(text);
 
   try {
     // create new chat
@@ -69,17 +84,21 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
     const userChats = await UserChats.find({ userId: userId });
 
     if (!userChats.length) {
+      console.log("Creating new user chats...");
       const newUserChats = new UserChats({
         userId: userId,
         chats: [
           {
             _id: savedChat._id,
-            tittle: text.substring(0, 40),
+            title: text.substring(0, 40),
           },
         ],
       });
+
+      await newUserChats.save();
     } else {
       // if exists, push to existing array
+      console.log("Updating the existing user chats...");
       await UserChats.updateOne(
         { userId: userId }, // filter using id then push to that array
         {

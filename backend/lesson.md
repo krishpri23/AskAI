@@ -10,3 +10,7 @@
 
 - For session validation, use clerk nodejs sdk
 - Using clerk middlewares, we can authenticate the requests made
+
+### Challenges
+
+- all chats were saving to chats and not userchats because i forgot to add `await` before saving userchats

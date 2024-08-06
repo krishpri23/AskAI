@@ -1,9 +1,20 @@
 // sidebar with a list of chats title
 
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { Link } from "react-router-dom";
 
 function ChatList() {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["repoData"],
+    queryFn: () =>
+      fetch(`${import.meta.env.VITE_API_URL}/api/userchats`, {
+        credentials: "include",
+      }).then((res) => res.json()),
+  });
+
+  console.log("data", data);
+  console.log("query error", error);
   const scrollbarStyles = {
     scrollbarWidth: "none", // For Firefox
     msOverflowStyle: "none", // For Internet Explorer and Edge
@@ -26,11 +37,20 @@ function ChatList() {
         className="w-full flex flex-col gap-5 overflow-y-scroll "
         style={scrollbarStyles}
       >
-        <Link className="chat-links">title 1</Link>
-        <Link className="chat-links">title 1</Link>
-        <Link className="chat-links">title 1</Link>
-        <Link className="chat-links">title 1</Link>
-        <Link className="chat-links">title 1</Link>
+        {isPending
+          ? "Loading..."
+          : error
+          ? "Something wrong"
+          : data?.map((chat) => (
+              <Link
+                to={`/dashboard/chats/${chat._id}`}
+                className="chat-links"
+                key={chat._id}
+              >
+                {" "}
+                {chat?.title}
+              </Link>
+            ))}
       </div>
 
       <hr />
