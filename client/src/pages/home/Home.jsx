@@ -1,6 +1,11 @@
 import React from "react";
 
 function Home() {
+  const handleClick = async () => {
+    await fetch("http://localhost:3000/api/test", {
+      credentials: "include",
+    });
+  };
   return (
     <main className="w-full px-10 flex flex-col justify-center items-center md:flex-row md:justify-between md:items-start text-slate-900">
       <section className="px-5 py-2 flex flex-col justify-center gap-5 items-start text-white">
@@ -11,6 +16,7 @@ function Home() {
           {" "}
           Get started{" "}
         </button>
+        <button onClick={handleClick}> Test button</button>
       </section>
 
       <section> sec 2</section>

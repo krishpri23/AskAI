@@ -6,6 +6,7 @@ const express = require("express");
 const Imagekit = require("imagekit");
 const cors = require("cors");
 const { default: mongoose } = require("mongoose");
+const { ClerkExpressRequireAuth } = require("@clerk/clerk-sdk-node");
 
 const PORT = process.env.port || 3000;
 const app = express();
@@ -28,6 +29,7 @@ const connect = async () => {
 app.use(
   cors({
     url: "http://localhost:5173/",
+    credentials: true,
   })
 );
 
@@ -39,7 +41,12 @@ app.get("/api/upload", (req, res) => {
   res.send(result);
 });
 
-app.post("/api/chats", async (req, res) => {
+app.get("/api/test", ClerkExpressRequireAuth(), async (req, res) => {
+  console.log("success");
+  res.send("success");
+});
+
+app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
   const { userId, text } = req.body;
   console.log(text, userId);
 
@@ -92,6 +99,11 @@ app.post("/api/chats", async (req, res) => {
   }
 });
 
+// clerk auth
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(401).send("Unauthenticated!");
+});
 app.listen(PORT, () => {
   connect();
   console.log("server is running!");
