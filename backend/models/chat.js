@@ -34,5 +34,5 @@ const chatSchema = new mongoose.Schema(
 );
 
 // Check in the db model or create a new one
-const Chat = mongoose.models.Chat || mongoose.model("Chat", chatSchema);
+const Chat = mongoose.models.Chat || mongoose.model("chat", chatSchema);
 module.exports = Chat;

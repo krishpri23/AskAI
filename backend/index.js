@@ -48,22 +48,37 @@ app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
   try {
     const userChats = await UserChats.findOne({ userId });
     console.log(userChats, "fetch chats ");
-    res.status(200).send(userChats.chats);
+    res.status(200).send(userChats ? userChats.chats : []);
   } catch (error) {
     console.log(error);
     res.status(500).send("error fetching chat");
   }
 });
 
-app.get("/api/test", ClerkExpressRequireAuth(), async (req, res) => {
-  console.log("success");
-  res.send("success");
+// fetch single chat
+app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
+  const userId = req.auth.userId;
+
+  try {
+    const chat = await Chat.findOne({ _id: req.params.id, userId });
+    console.log("chats", chat);
+    res.status(200).send(chat ? chat : []);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error fetching single chat");
+  }
 });
 
+// app.get("/api/test", ClerkExpressRequireAuth(), async (req, res) => {
+//   console.log("success");
+//   res.send("success");
+// });
+
+//* POST
 app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
+
   const { text } = req.body;
-  console.log(text);
 
   try {
     // create new chat
@@ -79,6 +94,7 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
 
     // mongodb creates _id
     const savedChat = await newChat.save();
+    console.log("saved chat", savedChat);
 
     // check if the user exists, if yes, push the chat
     const userChats = await UserChats.find({ userId: userId });
@@ -98,7 +114,6 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
       await newUserChats.save();
     } else {
       // if exists, push to existing array
-      console.log("Updating the existing user chats...");
       await UserChats.updateOne(
         { userId: userId }, // filter using id then push to that array
         {
@@ -110,8 +125,12 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
           },
         }
       );
+
+      // Responds with chatID to open on new page
+      // res.status(201).send(newChat._id); //throws error as _id is sent as ObjectId("")
+      console.log("id sending to frontend", savedChat._id.toString());
+      res.status(201).send(savedChat._id.toString());
     }
-    res.status(201).send(newChat._id);
   } catch (error) {
     console.log(error);
     res.status(500).send("error creating chat");

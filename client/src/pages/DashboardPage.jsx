@@ -3,22 +3,49 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import { FaCirclePlus } from "react-icons/fa6";
 import { FaRegImages } from "react-icons/fa6";
 import { FaComputer } from "react-icons/fa6";
-import { useAuth } from "@clerk/clerk-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 function DashboardPage() {
-  const { userId } = useAuth();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (text) => {
+      const response = await fetch("http://localhost:3000/api/chats", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      // since the res is send as plain text use .text()
+      // return the data so that onSuccess can use it
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return response.text();
+    },
+
+    onSuccess: (id) => {
+      console.log("id from res", id);
+      // invalidate and refetch chatlist on the sidebar
+      queryClient.invalidateQueries({ queryKey: ["userChats"] });
+      navigate(`/dashboard/chats/${id}`);
+    },
+    onError: (error) => {
+      console.error(error, "Error creating chat");
+    },
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const text = e.target.text.value;
     if (!text) return;
-
-    await fetch("http://localhost:3000/api/chats", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
-    });
+    mutation.mutate(text);
   };
 
   return (
