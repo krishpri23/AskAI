@@ -50,7 +50,7 @@ app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
 
   try {
     const userChats = await UserChats.findOne({ userId });
-    console.log("fetched all user chats ");
+    console.log("fetched user chats ");
     res.status(200).send(userChats ? userChats.chats : []);
   } catch (error) {
     console.log(error);
@@ -145,42 +145,32 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
 // * PUT - update existing chat
 app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
+
   const { question, answer, img } = req.body;
+  console.log("img from updating chat", img);
 
-  console.log("img from backend", img);
-
-  const newItem = [
-    // Since creating a new chat, we are navigated to a new page with question
+  const newItems = [
     ...(question
-      ? [
-          {
-            role: "user",
-            parts: [{ text: question }],
-            ...(img && { img }),
-          },
-        ]
+      ? [{ role: "user", parts: [{ text: question }], ...(img && { img }) }]
       : []),
-    {
-      role: "model",
-      parts: [{ text: answer }],
-    },
+    { role: "model", parts: [{ text: answer }] },
   ];
+
   try {
     const updatedChat = await Chat.updateOne(
       { _id: req.params.id, userId },
       {
         $push: {
           history: {
-            $each: newItem,
+            $each: newItems,
           },
         },
       }
     );
-
-    // add qs,ans to the history of Chat model
     res.status(200).send(updatedChat);
-  } catch (error) {
-    res.status(500).send("error updating existing chat");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error adding conversation!");
   }
 });
 

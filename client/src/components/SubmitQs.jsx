@@ -24,56 +24,6 @@ function SubmitQs({ data }) {
     aiData: {}, // ai response
   });
 
-  useEffect(() => {
-    endRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [question, answer, imgInfo.dbData]);
-
-  const mutation = useMutation({
-    mutationFn: async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/chats/${data._id}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            question: question.length ? question : undefined,
-            answer: answer,
-            img: imgInfo.dbData?.filePath || undefined,
-          }),
-        }
-      );
-
-      // since the res is send as plain text use .text() and return it
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      return response.text();
-    },
-
-    onSuccess: (id) => {
-      console.log("id from res", id);
-      // invalidate and refetch chatlist on chat page
-      queryClient
-        .invalidateQueries({ queryKey: ["chat", data._id] })
-        .then(() => {
-          setQuestion("");
-          setAnswer("");
-          setImgInfo({
-            isLoading: false,
-            dbData: {},
-            error: "",
-            aiData: {}, // ai response
-          });
-        });
-    },
-    onError: (error) => {
-      console.error(error, "Error creating chat");
-    },
-  });
-
   const chat = model.startChat({
     // roles can't be changed. either user or model, use this history in chat model
     history: [
@@ -86,10 +36,61 @@ function SubmitQs({ data }) {
       // maxOutputTokens: 100,
     },
   });
+  useEffect(() => {
+    endRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [question, answer, imgInfo.dbData, data]);
+
+  console.log("image info", imgInfo.dbData?.filePath);
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/chats/${data._id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            question: question.length ? question : undefined,
+            answer,
+            img: imgInfo?.dbData?.filePath || undefined,
+          }),
+        }
+      );
+
+      console.log("done uploading to db...");
+
+      if (!response.ok) {
+        console.log("response not ok", response);
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient
+        .invalidateQueries({ queryKey: ["chat", data._id] })
+        .then(() => {
+          formRef.current.reset();
+          setQuestion("");
+          setAnswer("");
+          setImgInfo({
+            isLoading: false,
+            error: "",
+            dbData: {},
+            aiData: {},
+          });
+        });
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
 
   // Using GeminiAPI, we are generating response
   const add = async (prompt) => {
     setQuestion(prompt);
+    console.log("ai data", imgInfo?.aiData);
     try {
       const result = await chat.sendMessageStream(
         Object.entries(imgInfo.aiData).length
@@ -107,7 +108,7 @@ function SubmitQs({ data }) {
     } catch (error) {
       console.log(error);
     }
-    setImgInfo({ isLoading: false, error: "", dbData: {}, aiData: {} });
+    // setImgInfo({ isLoading: false, error: "", dbData: {}, aiData: {} });
   };
 
   const handleSubmit = (e) => {
@@ -115,20 +116,11 @@ function SubmitQs({ data }) {
     const text = e.target.text.value;
     if (!text) return;
     add(text);
-    e.target.text.value = "";
   };
 
   return (
     <>
-      <div className="flex flex-col">
-        {question && <div className="user"> {question} </div>}
-        {answer && (
-          <div className="response">
-            {" "}
-            <Markdown>{answer}</Markdown>{" "}
-          </div>
-        )}
-      </div>
+      <div className="flex flex-col"></div>
 
       {imgInfo?.isLoading && <span> Loading...</span>}
       {imgInfo?.dbData?.filePath && (
@@ -139,11 +131,19 @@ function SubmitQs({ data }) {
           transformation={[{ width: 100 }]}
         />
       )}
+
+      {question && <div className="user"> {question} </div>}
+      {answer && (
+        <div className="response">
+          {" "}
+          <Markdown>{answer}</Markdown>{" "}
+        </div>
+      )}
+
       {/* To scroll down automatically on refresh */}
       <div ref={endRef} />
 
       <form
-        action=""
         onSubmit={handleSubmit}
         className="w-full rounded-xl bg-slate-600 text-slate-300 flex items-center my-5 "
       >
