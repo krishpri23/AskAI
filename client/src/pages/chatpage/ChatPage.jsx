@@ -52,7 +52,7 @@ function ChatPage() {
 
       {/* To Prevent rendering the form component whenever a new message is received, create separate component */}
       <div className="w-3/4  mx-auto">
-        <SubmitQs />
+        <SubmitQs data={data} />
       </div>
     </section>
   );

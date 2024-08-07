@@ -11,6 +11,12 @@
 - For session validation, use clerk nodejs sdk
 - Using clerk middlewares, we can authenticate the requests made
 
+### MongoDB
+
+- `$push` : The $push operator is used to add a value to an array in a MongoDB document. When used by itself, it appends the specified value to the end of the array.
+
+- `$each` : The $each modifier is used in conjunction with $push to add multiple values to an array. It allows you to push multiple elements into an array field in one operation.
+
 ### Challenges
 
 1. all chats were saving to chats and not userchats because i forgot to add `await` before saving userchats

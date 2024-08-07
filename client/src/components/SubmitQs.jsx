@@ -5,10 +5,12 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import Upload from "./Upload";
 import { IKImage } from "imagekitio-react";
 import model from "../lib/Gemini";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Markdown from "react-markdown";
 
-function SubmitQs() {
+function SubmitQs({ data }) {
   const endRef = useRef(null);
+  const queryClient = useQueryClient();
 
   //  Using this variable, we can display them on the left/right side of the screen
   const [question, setQuestion] = useState("");
@@ -26,17 +28,59 @@ function SubmitQs() {
     endRef.current.scrollIntoView({ behavior: "smooth" });
   }, [question, answer, imgInfo.dbData]);
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/chats/${data._id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: question.length ? question : undefined,
+            answer: answer,
+            img: imgInfo.dbData?.filePath || undefined,
+          }),
+        }
+      );
+
+      // since the res is send as plain text use .text() and return it
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      return response.text();
+    },
+
+    onSuccess: (id) => {
+      console.log("id from res", id);
+      // invalidate and refetch chatlist on chat page
+      queryClient
+        .invalidateQueries({ queryKey: ["chat", data._id] })
+        .then(() => {
+          setQuestion("");
+          setAnswer("");
+          setImgInfo({
+            isLoading: false,
+            dbData: {},
+            error: "",
+            aiData: {}, // ai response
+          });
+        });
+    },
+    onError: (error) => {
+      console.error(error, "Error creating chat");
+    },
+  });
+
   const chat = model.startChat({
     // roles can't be changed. either user or model, use this history in chat model
     history: [
-      // {
-      //   role: "user",
-      //   parts: [{ text: "Write me a story" }],
-      // },
-      // {
-      //   role: "model",
-      //   parts: [{ text: "Great to meet you. What would you like to know?" }],
-      // },
+      // data?.history.map(({ role, parts }) => ({
+      //   role,
+      //   parts: [{ text: parts[0].text }],
+      // })),
     ],
     generationConfig: {
       // maxOutputTokens: 100,
@@ -46,20 +90,22 @@ function SubmitQs() {
   // Using GeminiAPI, we are generating response
   const add = async (prompt) => {
     setQuestion(prompt);
+    try {
+      const result = await chat.sendMessageStream(
+        Object.entries(imgInfo.aiData).length
+          ? [imgInfo.aiData, prompt]
+          : [prompt]
+      );
 
-    const result = await chat.sendMessageStream(
-      Object.entries(imgInfo.aiData).length
-        ? [prompt, imgInfo.aiData]
-        : [prompt]
-    );
-
-    let accumulatedText = "";
-    for await (const chunk of result.stream) {
-      const chunkText = chunk.text();
-      accumulatedText += chunkText;
-      console.log(accumulatedText, "acc text");
-
-      setAnswer(accumulatedText);
+      let accumulatedText = "";
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text();
+        accumulatedText += chunkText;
+        setAnswer(accumulatedText);
+      }
+      mutation.mutate();
+    } catch (error) {
+      console.log(error);
     }
     setImgInfo({ isLoading: false, error: "", dbData: {}, aiData: {} });
   };
@@ -85,11 +131,12 @@ function SubmitQs() {
       </div>
 
       {imgInfo?.isLoading && <span> Loading...</span>}
-      {imgInfo?.dbData && (
+      {imgInfo?.dbData?.filePath && (
         <IKImage
           urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
           path={imgInfo?.dbData?.filePath}
           width={100}
+          transformation={[{ width: 100 }]}
         />
       )}
       {/* To scroll down automatically on refresh */}

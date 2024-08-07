@@ -6,6 +6,8 @@ const authenticator = async () => {
   try {
     const response = await fetch("http://localhost:3000/api/upload");
 
+    console.log("response from api", response);
+
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
@@ -14,6 +16,7 @@ const authenticator = async () => {
     }
 
     const data = await response.json();
+    console.log("response from img upload", data);
     const { signature, expire, token } = data;
     return { signature, expire, token };
   } catch (error) {
@@ -59,15 +62,18 @@ function Upload({ setImgInfo }) {
     reader.readAsDataURL(file);
   };
 
+  const urlEndpoint = import.meta.env.VITE_IMAGE_KIT_ENDPOINT;
+  const publicKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
+  console.log("endpoint", urlEndpoint, publicKey);
+
   return (
     <div className="px-4">
       <IKContext
-        urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
-        publicKey={import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY}
+        urlEndpoint={urlEndpoint}
+        publicKey={publicKey}
         authenticator={authenticator}
       >
         <IKUpload
-          fileName="file.png"
           onError={onError}
           onSuccess={onSuccess}
           onUploadProgress={onUploadProgress}

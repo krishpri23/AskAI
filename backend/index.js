@@ -20,11 +20,12 @@ const connect = async () => {
   }
 };
 
-// const imagekit = new Imagekit({
-//   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
-//   publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-//   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
-// });
+//initialize imageKit
+const imagekit = new Imagekit({
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+});
 
 app.use(
   cors({
@@ -35,9 +36,11 @@ app.use(
 
 app.use(express.json());
 
+// image upload
 app.get("/api/upload", (req, res) => {
   //  {token, signature,expiry} as response
   const result = imagekit.getAuthenticationParameters();
+  console.log("result from imagekit", result);
   res.send(result);
 });
 
@@ -47,7 +50,7 @@ app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
 
   try {
     const userChats = await UserChats.findOne({ userId });
-    console.log(userChats, "fetch chats ");
+    console.log("fetched all user chats ");
     res.status(200).send(userChats ? userChats.chats : []);
   } catch (error) {
     console.log(error);
@@ -61,7 +64,7 @@ app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
 
   try {
     const chat = await Chat.findOne({ _id: req.params.id, userId });
-    console.log("chats", chat);
+    console.log("fetched single chat...");
     res.status(200).send(chat ? chat : []);
   } catch (error) {
     console.log(error);
@@ -94,7 +97,7 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
 
     // mongodb creates _id
     const savedChat = await newChat.save();
-    console.log("saved chat", savedChat);
+    console.log("saving chat");
 
     // check if the user exists, if yes, push the chat
     const userChats = await UserChats.find({ userId: userId });
@@ -130,12 +133,54 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
 
       // Responds with chatID to open on new page
       // res.status(201).send(newChat._id); //throws error as _id is sent as ObjectId("")
-      console.log("id sending to frontend", savedChat._id.toString());
-      res.status(201).send(savedChat._id.toString());
+
+      res.status(201).send(savedChat._id.toString()); // 201 new resource created
     }
   } catch (error) {
     console.log(error);
     res.status(500).send("error creating chat");
+  }
+});
+
+// * PUT - update existing chat
+app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
+  const userId = req.auth.userId;
+  const { question, answer, img } = req.body;
+
+  console.log("img from backend", img);
+
+  const newItem = [
+    // Since creating a new chat, we are navigated to a new page with question
+    ...(question
+      ? [
+          {
+            role: "user",
+            parts: [{ text: question }],
+            ...(img && { img }),
+          },
+        ]
+      : []),
+    {
+      role: "model",
+      parts: [{ text: answer }],
+    },
+  ];
+  try {
+    const updatedChat = await Chat.updateOne(
+      { _id: req.params.id, userId },
+      {
+        $push: {
+          history: {
+            $each: newItem,
+          },
+        },
+      }
+    );
+
+    // add qs,ans to the history of Chat model
+    res.status(200).send(updatedChat);
+  } catch (error) {
+    res.status(500).send("error updating existing chat");
   }
 });
 
