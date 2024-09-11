@@ -1,0 +1,30 @@
+.rootlayout {
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: bold;
+
+      img {
+        width: 62px;
+        height: 54px;
+        background-color: transparent;
+      }
+    }
+  }
+  main {
+    flex: 1;
+    /* suppose content goes beyond boundary hide scrollbar */
+    overflow: hidden;
+  }
+}
