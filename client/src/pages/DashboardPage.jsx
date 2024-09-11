@@ -48,11 +48,13 @@ function DashboardPage() {
   };
 
   return (
-    <section className="relative w-full flex flex-col min-h-screen bg-slate-900 text-white p-5 ">
+    <section className="relative w-full  flex flex-col  bg-slate-900 text-white ">
       {/* logo and create chat links */}
-      <div className="flex-1 flex flex-col justify-center items-center">
+      <div className="flex-grow flex flex-col justify-center items-center">
         {/* <img src="" alt="" />  */}
-        <h1 className="name">Ask AI</h1>
+        <h1 className="uppercase text-8xl font-bold tracking-widest bg-gradient-to-r from-blue-400 to-red-800 text-transparent bg-clip-text">
+          Ask AI
+        </h1>
         <div className="flex justify-center items-center py-5 gap-10">
           <div className="ring-1 ring-slate-500 rounded-xl px-8 py-5 flex flex-col justify-center items-center">
             <FaCirclePlus className="w-10 h-7 my-2 text-slate-500 " />

@@ -20,7 +20,7 @@ function ChatList() {
     msOverflowStyle: "none", // For Internet Explorer and Edge
   };
   return (
-    <section className="w-full min-h-screen flex flex-col gap-5 justify-start items-start">
+    <section className="w-full flex flex-col gap-3 justify-center items-start px-4">
       <h1 className="uppercase text-xl"> Dashboard </h1>
       <Link to="/dashboard" className="chat-links">
         Create new chat
@@ -34,7 +34,7 @@ function ChatList() {
       <h2>Recent chats</h2>
       {/* scroll chats */}
       <div
-        className="w-full flex flex-col gap-5 overflow-y-scroll "
+        className="relative w-full flex flex-col gap-5 overflow-y-scroll "
         style={scrollbarStyles}
       >
         {isPending
@@ -56,7 +56,7 @@ function ChatList() {
       </div>
 
       <hr />
-      <span className="mt-auto">Upgrade to pro</span>
+      <span className="absolute bottom-0 mb-5">Upgrade to pro</span>
     </section>
   );
 }
