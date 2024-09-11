@@ -13,20 +13,25 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 
-// react query
-const queryClient = new QueryClient();
-
-// Import your clerk publishable key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key");
-}
 function RootLayout() {
+  // react query
+  const queryClient = new QueryClient();
+
+  // Import your clerk publishable key
+  const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+  if (!PUBLISHABLE_KEY) {
+    return (
+      <div className="bg-red-300 p-10 mx-auto">
+        <h2> Missing publishable key </h2>
+      </div>
+    );
+    // throw new Error("Missing Publishable Key");
+  }
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/ ">
       <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen flex flex-col">
+        <main className="flex flex-col min-h-screen bg-slate-950 text-slate-300">
           <header className="p-4 flex justify-between bg-slate-950 text-slate-300 font-bold">
             <Link to="/">
               <span>AskAI</span>
@@ -40,10 +45,11 @@ function RootLayout() {
               </SignedIn>
             </div>
           </header>
-          <main className="flex-1 bg-slate-950  text-slate-300">
+          {/* takes the rest of space */}
+          <div className="flex-1">
             <Outlet />
-          </main>
-        </div>
+          </div>
+        </main>
       </QueryClientProvider>
     </ClerkProvider>
   );

@@ -8,12 +8,12 @@ function DashboardLayout() {
   const { userId, isLoaded } = useAuth();
   const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     if (!userId && isLoaded) {
-  //       return navigate("/login");
-  //     }
-  //     if (userId && !isLoaded) return "Loading...";
-  //   }, [isLoaded, userId, navigate]);
+  useEffect(() => {
+    if (!userId && isLoaded) {
+      return navigate("/login");
+    }
+    if (userId && !isLoaded) return "Loading...";
+  }, [isLoaded, userId, navigate]);
   return (
     <div className="w-full min-h-screen flex justify-between debug-overflow ">
       <div className="max-md:hidden w-1/5  px-5 py-4 ">

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   const handleClick = async () => {
@@ -7,20 +8,50 @@ function Home() {
     });
   };
   return (
-    <main className="w-full px-10 flex flex-col justify-center items-center md:flex-row md:justify-between md:items-start text-slate-900">
-      <section className="px-5 py-2 flex flex-col justify-center gap-5 items-start text-white">
-        <h1 className="name"> AskAI </h1>
+    <div className="font-poppins w-full flex flex-col justify-center items-center lg:flex-row text-white ">
+      {/* <img
+        src="/orbital.png"
+        alt="orbit"
+        className="absolute top-0 bottom-0 left-0 opacity-30 animate-spin-slow "
+      /> */}
+
+      <section className=" px-10 flex flex-col justify-center items-start gap-3 lg:w-1/2  mt-10">
+        <h1 className="uppercase text-8xl font-bold tracking-widest bg-gradient-to-r from-blue-400 to-red-800 text-transparent bg-clip-text">
+          {" "}
+          Ask AI{" "}
+        </h1>
         <h3> Supercharge your creativity and productivity </h3>
-        <p> blah blah blah </p>
-        <button className="w-1/2 px-5 py-2 bg-white text-slate-800 font-bold rounded-3xl bg-gradient-to-r from-blue-400 to-red-500">
+        <p>
+          {" "}
+          Lorem ipsum dolor sit, amet cnsectecut adipiching elit, pa=lcsadjf
+          sint fosan{" "}
+        </p>
+        <Link
+          className="w-1/3 px-5 py-2 text-center  text-white mt-5 rounded-3xl bg-blue-500 hover:bg-white hover:text-blue-500"
+          to={"/dashboard"}
+        >
           {" "}
           Get started{" "}
-        </button>
+        </Link>
         <button onClick={handleClick}> Test button</button>
       </section>
-
-      <section> sec 2</section>
-    </main>
+      <section className="flex-1 flex justify-center items-center mt-10 ">
+        <div className="relative bg-indigo-950 rounded-xl w-3/4 flex flex-col justify-center items-center h-72 ">
+          <div className=" w-full  h-full overflow-hidden absolute top-0 left-0 ">
+            <img
+              src="/bg.png"
+              alt="celebration"
+              className="w-full h-full opacity-25 animate-slide"
+            />
+          </div>
+          <img
+            src="/bot.png"
+            alt="coding bot"
+            className="max-w-80 p-5 object-cover animate-bot"
+          />
+        </div>
+      </section>
+    </div>
   );
 }
 
