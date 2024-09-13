@@ -21,12 +21,12 @@
   a {
     padding: 10px;
     border-radius: 10px;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
-  &:hover {
-    text-decoration: underline;
-    color: #e23e57;
-  }
   .upgrade {
     position: absolute;
     bottom: 0;
