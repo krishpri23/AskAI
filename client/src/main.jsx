@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import "./index.scss";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Homepage from "./pages/homepage/Homepage.jsx";
 import DashboardPage from "./pages/DashboardPage/DashboardPage.jsx";

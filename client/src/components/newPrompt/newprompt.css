@@ -1,0 +1,36 @@
+.endChat {
+  padding-bottom: 20px;
+}
+.newForm {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  gap: 10px;
+
+  img,
+  .attachment {
+    width: 20px;
+    height: 20px;
+  }
+
+  button,
+  label {
+    border-radius: 50%;
+    background-color: darkgrey;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  input {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+  }
+}

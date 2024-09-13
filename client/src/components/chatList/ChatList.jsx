@@ -14,14 +14,14 @@ const ChatList = () => {
 
       <span>RECENT CHATS</span>
       <div className="list">
-        <Link to="/"> my chat list 1 </Link>
-        <Link to="/"> my chat list 1 </Link>
-        <Link to="/"> my chat list 1 </Link>
-        <Link to="/"> my chat list 1 </Link>
-        <Link to="/"> my chat list 1 </Link>
-        <Link to="/"> my chat list 1 </Link>
-        <Link to="/"> my chat list 1 </Link>
-        <Link to="/"> my chat list 1 </Link>
+        <Link to="/dashboard/chats/1234"> my chat list 1 </Link>
+        <Link to="/dashboard/chats/1234"> my chat list 1 </Link>
+        <Link to="/dashboard/chats/1234"> my chat list 1 </Link>
+        <Link to="/dashboard/chats/1234"> my chat list 1 </Link>
+        <Link to="/dashboard/chats/1234"> my chat list 1 </Link>
+        <Link to="/dashboard/chats/1234"> my chat list 1 </Link>
+        <Link to="/dashboard/chats/1234"> my chat list 1 </Link>
+
         <hr />
       </div>
 
