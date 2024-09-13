@@ -23,7 +23,7 @@
 
     h1 {
       font-size: 60px;
-      background: linear-gradient(to right, #e23e57, rgb(254, 194, 194));
+      background: linear-gradient(to right, darkviolet, pink);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
@@ -35,20 +35,19 @@
     p {
       font-weight: 400;
       max-width: 70%;
-
       @media screen and (max-width: 1024px) {
         max-width: 100%;
       }
     }
     a {
       padding: 10px 20px;
-      background-color: #e23e57;
+
       border-radius: 20px;
       margin-top: 20px;
 
       &:hover {
         background-color: white;
-        color: #e23e57;
+
         font-weight: bold;
       }
     }

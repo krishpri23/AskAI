@@ -24,7 +24,7 @@
       }
       h1 {
         font-size: 70px;
-        background: linear-gradient(to right, #e23e57, rgb(254, 194, 194));
+        background: linear-gradient(to right, darkviolet, pink);
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
@@ -70,7 +70,7 @@
       align-items: center;
       margin-bottom: 10px;
       border-radius: 20px;
-      background-color: #a589b9;
+      background-color: #2d2a39;
 
       input {
         flex: 1;
@@ -78,7 +78,6 @@
         background-color: transparent;
         border: none;
         outline: none;
-        /* color: #311d3f; */
         color: #000;
       }
 
