@@ -1,0 +1,159 @@
+/*
+    homepage is block level element so it takes up full width of parent without defining 
+    flex-1 to set equal width for both divs
+*/
+.homepage {
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  height: 100%;
+
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+
+    h1 {
+      font-size: 60px;
+      background: linear-gradient(to right, #e23e57, rgb(254, 194, 194));
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    p {
+      font-weight: 400;
+      max-width: 70%;
+    }
+    a {
+      padding: 10px 20px;
+      background-color: #e23e57;
+      border-radius: 20px;
+      margin-top: 20px;
+
+      &:hover {
+        background-color: white;
+        color: #e23e57;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+
+    .imgContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #88304e;
+      border-radius: 30px;
+      width: 80%;
+      height: 30%;
+      position: relative;
+
+      .bgContainer {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 50px;
+
+        .bg {
+          background-image: url("/bg.png");
+          opacity: 0.3;
+          height: 100%;
+          width: 200%;
+          background-size: auto 100%;
+          animation: 8s ease-in-out infinite alternate slideAnimate;
+        }
+      }
+
+      .bot {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        animation: 3s ease-in-out infinite alternate botAnimate;
+      }
+    }
+
+    .typeAnimation {
+      position: absolute;
+      right: 0;
+      bottom: -30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background-color: #1d0a10;
+      border-radius: 10px;
+      font-size: 20px;
+
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+  }
+  .orbital {
+    position: absolute;
+    opacity: 0.09;
+    top: 0;
+    left: 0;
+    animation: 100s linear infinite rotateOrbital;
+  }
+
+  .terms {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    bottom: 20px;
+    /* places left edge to middle of the parent container */
+    left: 50%;
+    /* moves element left by half of its own width, aligning center to the parent element */
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rotateOrbital {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(60deg);
+  }
+}
+
+@keyframes botAnimate {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  100% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+}
+@keyframes slideAnimate {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
