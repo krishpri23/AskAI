@@ -1,0 +1,44 @@
+.chatlist {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  position: relative;
+  height: 100%;
+
+  span,
+  hr {
+    margin: 10px 0px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: #311d3f;
+    max-width: 100vh;
+  }
+  a {
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: #e23e57;
+  }
+  .upgrade {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 20px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 10px;
+
+    span {
+      font-weight: 300;
+    }
+  }
+}

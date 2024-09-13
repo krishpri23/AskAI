@@ -1,8 +1,8 @@
-# React + Vite
+# ASK AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Clerk for Authentication, it provides sign in , sign out features
+- On signin, it will redirect to dashboard
+- Protected routes are added in the rootlayout by accessing `userId` from `useAuth` hook given by clerk
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Homepage animations are added manually
+- Typing animation uses package

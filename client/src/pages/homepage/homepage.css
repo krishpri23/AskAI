@@ -136,6 +136,7 @@
     top: 0;
     left: 0;
     animation: 100s linear infinite rotateOrbital;
+    z-index: -1;
   }
 
   .terms {
