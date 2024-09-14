@@ -14,7 +14,7 @@ const NewPrompt = () => {
   return (
     <>
       {/* add new chat */}
-      TEST
+
       <div ref={scrollRef} className="endChat"></div>
       <form className="newForm">
         <label htmlFor="fileInput">

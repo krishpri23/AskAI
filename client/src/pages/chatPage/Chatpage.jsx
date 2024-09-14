@@ -20,6 +20,20 @@ const ChatPage = () => {
           <div className="message user">Message from User</div>
           <div className="message">Message from AI</div>
           <div className="message user">Message from User</div>
+          <div className="message">Message from AI</div>
+          <div className="message user">Message from User</div>
+          <div className="message">Message from AI</div>
+          <div className="message user">Message from User</div>
+          <div className="message">Message from AI</div>
+          <div className="message user">Message from User</div>
+          <div className="message">Message from AI</div>
+          <div className="message user">Message from User</div>
+          <div className="message">Message from AI</div>
+          <div className="message user">Message from User</div>
+          <div className="message">Message from AI</div>
+          <div className="message user">Message from User</div>
+          <div className="message">Message from AI</div>
+          <div className="message user">Message from User</div>
 
           {/* Should be inside chats only then ref will work  */}
           <NewPrompt />

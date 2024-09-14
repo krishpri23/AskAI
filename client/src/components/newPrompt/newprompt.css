@@ -1,13 +1,14 @@
 .endChat {
-  padding-bottom: 20px;
+  padding-bottom: 70px;
 }
+
 .newForm {
-  width: 80%;
+  width: 50%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
   gap: 10px;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 10px;
 
   img,
   .attachment {
