@@ -42,6 +42,7 @@ const NewPrompt = () => {
 
   const add = async (text) => {
     if (!text) return;
+
     try {
       setQuestion(text);
 

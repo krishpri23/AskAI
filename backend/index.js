@@ -6,7 +6,10 @@ const express = require("express");
 const Imagekit = require("imagekit");
 const cors = require("cors");
 const { default: mongoose } = require("mongoose");
-const { ClerkExpressRequireAuth } = require("@clerk/clerk-sdk-node");
+const {
+  ClerkExpressRequireAuth,
+  requireAuth,
+} = require("@clerk/clerk-sdk-node");
 
 const PORT = process.env.port || 3000;
 const app = express();
@@ -81,7 +84,11 @@ app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
 app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
 
+  console.log(userId, "USER ID from backend");
+
   const { text } = req.body;
+
+  console.log(text, "TEXT");
 
   try {
     // create new chat
