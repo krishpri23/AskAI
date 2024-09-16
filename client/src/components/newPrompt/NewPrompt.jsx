@@ -26,19 +26,45 @@ const NewPrompt = () => {
     }
   }, [question, answer]);
 
+  // To store chat history
+  const chat = generativeModel.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
+      },
+    ],
+  });
+
   const add = async (text) => {
     if (!text) return;
     try {
       setQuestion(text);
 
-      const result = await generativeModel.generateContent(
+      // This makes sure AI response is sent as streams
+      const result = await chat.sendMessageStream(
         Object.entries(img?.aiData).length ? [img.aiData, text] : [text]
       );
 
-      const response = await result.response;
-      const answer = await response.text();
-      console.log("response", answer);
-      setAnswer(answer);
+      let accumulatedText = "";
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text();
+        console.log(chunkText);
+        accumulatedText += chunkText;
+        // This will display chunks of text as AI responds rather than showing the entire answer at once
+        setAnswer(accumulatedText);
+      }
+
+      setImg({
+        isLoading: false,
+        error: null,
+        dbData: {},
+        aiData: {},
+      });
     } catch (error) {
       console.log(error);
     }
