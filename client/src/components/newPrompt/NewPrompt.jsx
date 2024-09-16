@@ -2,46 +2,82 @@ import { useEffect, useRef, useState } from "react";
 import "./newprompt.css";
 import Upload from "../upload/Upload";
 import { IKImage } from "imagekitio-react";
+import generativeModel from "../../lib/gemini";
+import Markdown from "react-markdown";
 
 const NewPrompt = () => {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+
   const scrollRef = useRef(null);
   const [img, setImg] = useState({
     isLoading: false,
     error: null,
     dbData: {},
+    aiData: {},
   });
+
+  console.log(img?.aiData, " image data ");
 
   useEffect(() => {
     if (scrollRef.current) {
       console.log(scrollRef.current);
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, []);
+  }, [question, answer]);
 
-  console.log("Img response", img);
+  const add = async (text) => {
+    if (!text) return;
+    try {
+      setQuestion(text);
+
+      const result = await generativeModel.generateContent(
+        Object.entries(img?.aiData).length ? [img.aiData, text] : [text]
+      );
+
+      const response = await result.response;
+      const answer = await response.text();
+      console.log("response", answer);
+      setAnswer(answer);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // text represents the input name
+    const question = e.target.text.value;
+    add(question);
+    e.target.text.value = "";
+  };
 
   return (
     <>
       {/* add new chat */}
       {img?.isLoading && <div>Loading....</div>}
-      {img?.dbData?.res?.filePath && (
+      {img?.dbData?.filePath && (
         <IKImage
           urlEndpoint={import.meta.env.VITE_IMAGEKIT_ENDPOINT}
-          path={img?.dbData?.res?.filePath}
+          path={img?.dbData?.filePath}
           width={100}
           transformation={[
             {
               height: 100,
               width: 100,
             },
-            {
-              quality: 10,
-            },
           ]}
         />
       )}
+      {question && <div className="message user"> {question}</div>}
+      {answer.length > 1 || answer != undefined ? (
+        <div className="message">
+          {" "}
+          <Markdown>{answer}</Markdown>
+        </div>
+      ) : null}
       <div ref={scrollRef} className="endChat"></div>
-      <form className="newForm">
+      <form className="newForm" onSubmit={handleSubmit}>
         <Upload setImg={setImg} />
         <input
           type="file"
@@ -53,6 +89,7 @@ const NewPrompt = () => {
         <input
           className="input-box"
           type="text"
+          name="text"
           placeholder="Ask me anything"
         />
         <button>

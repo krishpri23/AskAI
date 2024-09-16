@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { IKContext, IKImage, IKUpload } from "imagekitio-react";
+import { GenerativeModel } from "@google/generative-ai";
 
 const publicKey = import.meta.env.VITE_IMAGEKIT_PUBLICKEY;
 const urlEndpoint = import.meta.env.VITE_IMAGEKIT_ENDPOINT;
@@ -34,7 +35,11 @@ const Upload = ({ setImg }) => {
 
   const onSuccess = (res) => {
     console.log("Success", res);
-    setImg((prev) => ({ ...prev, isLoading: false, dbData: { res } }));
+    setImg((prev) => ({ ...prev, isLoading: false, dbData: res }));
+
+    if (uploadRef.current) {
+      uploadRef.current.value = "";
+    }
   };
 
   const onUploadProgress = (progress) => {
@@ -42,9 +47,24 @@ const Upload = ({ setImg }) => {
   };
 
   const onUploadStart = (evt) => {
-    console.log("Start", evt);
-    setImg((prev) => ({ ...prev, isLoading: true }));
+    const files = evt.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImg((prev) => ({
+        ...prev,
+        isLoading: true,
+        aiData: {
+          inlineData: {
+            data: reader.result.split(",")[1], // Base64 encoded string
+            mimeType: files.type,
+          },
+        },
+      }));
+    };
+
+    reader.readAsDataURL(files); // Reads file as data URL (base64)
   };
+
   return (
     <IKContext
       publicKey={publicKey}
@@ -55,13 +75,14 @@ const Upload = ({ setImg }) => {
         fileName="test-upload.png"
         onError={onError}
         onSuccess={onSuccess}
+        useUniqueFileName={true}
         onUploadProgress={onUploadProgress}
         onUploadStart={onUploadStart}
         style={{ display: "none" }}
         ref={uploadRef}
       />
-      <label htmlFor="fileInput" onClick={() => uploadRef.current.click()}>
-        <img className="attachment" src="/attachment.png" alt="attachment" />
+      <label onClick={() => uploadRef.current.click()}>
+        <img src="/attachment.png" alt="attachment" />
       </label>
     </IKContext>
   );
