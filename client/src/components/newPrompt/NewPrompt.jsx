@@ -4,10 +4,12 @@ import Upload from "../upload/Upload";
 import { IKImage } from "imagekitio-react";
 import generativeModel from "../../lib/gemini";
 import Markdown from "react-markdown";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const NewPrompt = () => {
+const NewPrompt = ({ data }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const queryClient = useQueryClient();
 
   const scrollRef = useRef(null);
   const [img, setImg] = useState({
@@ -17,14 +19,47 @@ const NewPrompt = () => {
     aiData: {},
   });
 
-  console.log(img?.aiData, " image data ");
-
   useEffect(() => {
     if (scrollRef.current) {
-      console.log(scrollRef.current);
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [question, answer]);
+
+  // when we send message, we get result from AI in accumulatedText then run this fn, update data in db and revalidate single chat
+  const mutation = useMutation({
+    mutationFn: () => {
+      return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: question.length ? question : undefined,
+          answer,
+          img: img.dbData?.filePath || undefined,
+        }),
+      }).then((res) => res.json());
+    },
+    onSuccess: ({ chat }) => {
+      console.log(chat, "received on success");
+      queryClient
+        .invalidateQueries({ queryKey: ["chat", data._id] })
+        .then(() => {
+          setQuestion("");
+          setAnswer("");
+          setImg({
+            isLoading: false,
+            error: null,
+            dbData: {},
+            aiData: {},
+          });
+        });
+    },
+    onError: (err) => {
+      console.log(err, "Error in mutation in new prompt");
+    },
+  });
 
   // To store chat history
   const chat = generativeModel.startChat({
@@ -54,18 +89,12 @@ const NewPrompt = () => {
       let accumulatedText = "";
       for await (const chunk of result.stream) {
         const chunkText = chunk.text();
-        console.log(chunkText);
+
         accumulatedText += chunkText;
         // This will display chunks of text as AI responds rather than showing the entire answer at once
         setAnswer(accumulatedText);
       }
-
-      setImg({
-        isLoading: false,
-        error: null,
-        dbData: {},
-        aiData: {},
-      });
+      mutation.mutate();
     } catch (error) {
       console.log(error);
     }
@@ -97,7 +126,7 @@ const NewPrompt = () => {
         />
       )}
       {question && <div className="message user"> {question}</div>}
-      {answer.length > 1 || answer != undefined ? (
+      {answer.length > 1 && answer != undefined ? (
         <div className="message">
           {" "}
           <Markdown>{answer}</Markdown>

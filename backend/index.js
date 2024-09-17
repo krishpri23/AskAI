@@ -75,12 +75,7 @@ app.get("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
   }
 });
 
-// app.get("/api/test", ClerkExpressRequireAuth(), async (req, res) => {
-//   console.log("success");
-//   res.send("success");
-// });
-
-//* POST
+// POST
 app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
 
@@ -138,10 +133,11 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
         }
       );
 
+      console.log("New user chat created!! ");
       // Responds with chatID to open on new page
       // res.status(201).send(newChat._id); //throws error as _id is sent as ObjectId("")
 
-      res.status(201).send(savedChat._id.toString()); // 201 new resource created
+      res.status(201).json({ chatId: savedChat._id.toString() }); // 201 new resource created
     }
   } catch (error) {
     console.log(error);
@@ -174,7 +170,7 @@ app.put("/api/chats/:id", ClerkExpressRequireAuth(), async (req, res) => {
         },
       }
     );
-    res.status(200).send(updatedChat);
+    res.status(200).json({ chats: updatedChat });
   } catch (err) {
     console.log(err);
     res.status(500).send("Error adding conversation!");
