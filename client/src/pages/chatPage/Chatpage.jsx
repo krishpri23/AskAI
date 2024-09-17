@@ -34,15 +34,17 @@ const ChatPage = () => {
               return (
                 <>
                   {msg.img && (
-                    <IKImage
-                      key={i}
-                      urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
-                      path={msg.img}
-                      width={100}
-                      transformation={[{ height: 100, width: 100 }]}
-                      loading="lazy"
-                      lgip={{ active: true, quality: 20 }}
-                    />
+                    <div className="message user">
+                      <IKImage
+                        key={msg._id}
+                        urlEndpoint={import.meta.env.VITE_IMAGEKIT_ENDPOINT}
+                        path={msg.img}
+                        width={100}
+                        transformation={[{ height: 100, width: 100 }]}
+                        loading="lazy"
+                        lgip={{ active: true, quality: 20 }}
+                      />
+                    </div>
                   )}
                   <div
                     className={msg.role === "user" ? "message user" : "message"}
@@ -55,7 +57,7 @@ const ChatPage = () => {
             })
           )}
           {/* Should be inside chats only then ref will work  */}
-          <NewPrompt data={data} />
+          {data && <NewPrompt data={data} />}
         </div>{" "}
       </div>
     </div>

@@ -24,7 +24,7 @@
 
       .message {
         padding: 20px;
-        background-color: darkslateblue;
+        /* background-color: darkslateblue; */
         border-radius: 20px;
         align-self: flex-start;
 

@@ -23,7 +23,19 @@ const NewPrompt = ({ data }) => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [question, answer]);
+  }, [question, answer, img?.dbData, data]);
+
+  const hasRun = useRef(false);
+  // runs twice in dev, once in prod because of strict mode
+  useEffect(() => {
+    // if only 1 question in db, it is question
+    if (!hasRun.current) {
+      if (data?.history.length === 1) {
+        add(data?.history[0].parts[0].text, true);
+      }
+      hasRun.current = true;
+    }
+  }, []);
 
   // when we send message, we get result from AI in accumulatedText then run this fn, update data in db and revalidate single chat
   const mutation = useMutation({
@@ -75,12 +87,10 @@ const NewPrompt = ({ data }) => {
     ],
   });
 
-  const add = async (text) => {
-    if (!text) return;
+  const add = async (text, isInitial) => {
+    if (!isInitial) setQuestion(text);
 
     try {
-      setQuestion(text);
-
       // This makes sure AI response is sent as streams
       const result = await chat.sendMessageStream(
         Object.entries(img?.aiData).length ? [img.aiData, text] : [text]
@@ -104,7 +114,7 @@ const NewPrompt = ({ data }) => {
     e.preventDefault();
     // text represents the input name
     const question = e.target.text.value;
-    add(question);
+    add(question, false);
     e.target.text.value = "";
   };
 
@@ -113,17 +123,19 @@ const NewPrompt = ({ data }) => {
       {/* add new chat */}
       {img?.isLoading && <div>Loading....</div>}
       {img?.dbData?.filePath && (
-        <IKImage
-          urlEndpoint={import.meta.env.VITE_IMAGEKIT_ENDPOINT}
-          path={img?.dbData?.filePath}
-          width={100}
-          transformation={[
-            {
-              height: 100,
-              width: 100,
-            },
-          ]}
-        />
+        <div className="message user">
+          <IKImage
+            urlEndpoint={import.meta.env.VITE_IMAGEKIT_ENDPOINT}
+            path={img?.dbData?.filePath}
+            width={100}
+            transformation={[
+              {
+                height: 100,
+                width: 100,
+              },
+            ]}
+          />
+        </div>
       )}
       {question && <div className="message user"> {question}</div>}
       {answer.length > 1 && answer != undefined ? (

@@ -15,7 +15,7 @@ const ChatList = () => {
     <div className="chatlist">
       <span>DASHBOARD</span>
 
-      <Link to="/"> Create new chat</Link>
+      <Link to="/dashboard"> Create new chat</Link>
       <Link to="/"> Explore ask ai</Link>
       <Link to="/"> Contact </Link>
       <hr />
