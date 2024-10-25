@@ -44,7 +44,7 @@ const DashboardPage = () => {
     <div className="dashboardpage">
       <div className="welcome">
         <div className="logo">
-          <img src="/logo.png" alt="logo" />
+          {/* <img src="/ailogo.png" alt="logo" /> */}
           <h1> ASK AI </h1>
         </div>
         <div className="options">

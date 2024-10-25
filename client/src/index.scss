@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+/* For Webkit-based browsers like Chrome and Safari */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+html, body {
+  scrollbar-width: none;
+}
+
+
 /* #522546 , #88304E , #E23e57 , #ffff */
 body {
   background-color: #0e0c16;
@@ -14,4 +25,13 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+// autofill color change
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #2c2937 inset !important;
+    -webkit-text-fill-color: #ffffff !important; /* Text color */
 }
