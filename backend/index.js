@@ -32,7 +32,7 @@ const imagekit = new Imagekit({
 
 app.use(
   cors({
-    url: "http://localhost:5173",
+    url: "https://askai-80ww.onrender.com", 
     credentials: true,
   })
 );
