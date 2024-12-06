@@ -12,7 +12,7 @@ const ChatPage = () => {
   const { isPending, error, data } = useQuery({
     queryKey: ["chat", id],
     queryFn: () =>
-      fetch(`${import.meta.env.VITE_API_URL}/api/chats/${id}`, {
+      fetch(`${import.meta.env.VITE_API_URL_PROD}/api/chats/${id}`, {
         credentials: "include",
       }).then((res) => res.json()),
   });

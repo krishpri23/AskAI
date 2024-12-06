@@ -1,17 +1,19 @@
 // Run express
-const Chat = require("./models/chat");
-require("dotenv").config();
-const UserChats = require("./models/userChats");
 const express = require("express");
-const Imagekit = require("imagekit");
 const cors = require("cors");
+require("dotenv").config();
+
+const Chat = require("./models/chat");
+const UserChats = require("./models/userChats");
+const Imagekit = require("imagekit");
+
 const { default: mongoose } = require("mongoose");
 const {
   ClerkExpressRequireAuth,
   requireAuth,
 } = require("@clerk/clerk-sdk-node");
 
-const PORT = process.env.port || 3000;
+const PORT = process.env.URL_PROD || 3000;
 const app = express();
 
 const connect = async () => {
@@ -32,12 +34,13 @@ const imagekit = new Imagekit({
 
 app.use(
   cors({
-    url: "https://askai-80ww.onrender.com", 
+    url: process.env.URL_PROD, 
     credentials: true,
   })
 );
-
 app.use(express.json());
+
+app.use(requireAuth());
 
 // image upload
 app.get("/api/upload", (req, res) => {
@@ -47,9 +50,11 @@ app.get("/api/upload", (req, res) => {
   res.send(result);
 });
 
+
 // fetch all user chats
 app.get("/api/userchats", ClerkExpressRequireAuth(), async (req, res) => {
   const userId = req.auth.userId;
+  console.log( req.auth, "Clerk Auth");
 
   try {
     const userChats = await UserChats.findOne({ userId });
@@ -184,5 +189,5 @@ app.use((err, req, res, next) => {
 });
 app.listen(PORT, () => {
   connect();
-  console.log("server is running!");
+  console.log(`server is running on  ${PORT}`);
 });

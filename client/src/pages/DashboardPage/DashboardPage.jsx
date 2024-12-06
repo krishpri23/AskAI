@@ -13,7 +13,7 @@ const DashboardPage = () => {
   const mutation = useMutation({
     mutationFn: (text) => {
       console.log(text, " text ");
-      return fetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
+      return fetch(`${import.meta.env.VITE_API_URL_PROD}/api/chats`, {
         method: "POST",
         credentials: "include",
         headers: {

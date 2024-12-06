@@ -40,7 +40,7 @@ const NewPrompt = ({ data }) => {
   // when we send message, we get result from AI in accumulatedText then run this fn, update data in db and revalidate single chat
   const mutation = useMutation({
     mutationFn: () => {
-      return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
+      return fetch(`${import.meta.env.VITE_API_URL_PROD}/api/chats/${data._id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
