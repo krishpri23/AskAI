@@ -13,7 +13,7 @@ const {
   requireAuth,
 } = require("@clerk/clerk-sdk-node");
 
-const PORT = process.env.URL_PROD || 3000;
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 const connect = async () => {
