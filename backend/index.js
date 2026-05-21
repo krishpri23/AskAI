@@ -102,7 +102,7 @@ app.post("/api/chats", ClerkExpressRequireAuth(), async (req, res) => {
       ],
     });
 
-    // mongodb creates _id
+    // mongodb creates _id`
     const savedChat = await newChat.save();
     console.log("saving chat");
 
